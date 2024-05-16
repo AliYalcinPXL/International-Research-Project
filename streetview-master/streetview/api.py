@@ -8,7 +8,7 @@ from pydantic import BaseModel
 
 class Location(BaseModel):
     lat: float
-    lng: float
+    lon: float  # Bing Maps uses 'lon' instead of 'lng'
 
 
 class MetaData(BaseModel):
@@ -24,14 +24,16 @@ def get_panorama_meta(pano_id: str, api_key: str) -> MetaData:
     Quota: This function doesn't use up any quota or charge on your API_KEY.
 
     Endpoint documented at:
-    https://developers.google.com/maps/documentation/streetview/metadata
+    https://docs.microsoft.com/en-us/bingmaps/rest-services/imagery/get-imagery-metadata
     """
-    url = (
-        "https://maps.googleapis.com/maps/api/streetview/metadata"
-        f"?pano={pano_id}&key={api_key}"
-    )
+    url = f"http://dev.virtualearth.net/REST/v1/Imagery/Metadata/Panorama/{pano_id}?key={api_key}"
     resp = requests.get(url)
-    return MetaData(**resp.json())
+    data = resp.json()
+
+    location_data = data["resourceSets"][0]["resources"][0]["point"]["coordinates"]
+    location = Location(lat=location_data[0], lon=location_data[1])
+
+    return MetaData(date=data["resourceSets"][0]["resources"][0]["captureDate"], location=location, pano_id=pano_id)
 
 
 def get_streetview(
@@ -44,10 +46,7 @@ def get_streetview(
     pitch: int = 0,
 ) -> Image.Image:
     """
-    Get an image using the official API. These are not panoramas.
-
-    You can find instructions to obtain an API key here:
-    https://developers.google.com/maps/documentation/streetview/
+    Get an image using the Bing Maps API.
 
     Args:
         pano_id (str): The panorama id.
@@ -62,13 +61,13 @@ def get_streetview(
         pitch (int): Image pitch.
     """
 
-    url = "https://maps.googleapis.com/maps/api/streetview"
+    url = "http://dev.virtualearth.net/REST/v1/Imagery/Map/Panorama"
     params: Dict[str, Union[str, int]] = {
-        "size": "%dx%d" % (width, height),
+        "mapSize": f"{width},{height}",
         "fov": fov,
         "pitch": pitch,
         "heading": heading,
-        "pano": pano_id,
+        "key": api_key,
         "key": api_key,
     }
 

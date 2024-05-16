@@ -4,7 +4,7 @@ import pytest
 
 from streetview import get_panorama_meta, search_panoramas
 
-GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", None)
+BING_MAPS_API_KEY = os.environ.get("Av9sOT2uny6SRjhcM7DPyN8aism5nZXIQyP715Yumlhy8Z6d8ElcVOSlnVVFiCVD", None)
 
 
 SYDNEY = {
@@ -47,7 +47,7 @@ class GenericGetPanoidsTest:
         meta_dates = [
             get_panorama_meta(
                 pano_id=pano_id,
-                api_key=GOOGLE_MAPS_API_KEY,
+                api_key=BING_MAPS_API_KEY,
             ).date
             for pano_id in ids
         ]

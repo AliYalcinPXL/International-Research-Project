@@ -28,7 +28,7 @@ def get_width_and_height_from_zoom(zoom: int) -> Tuple[int, int]:
     Returns the width and height of a panorama at a given zoom level, depends on the
     zoom level.
     """
-    return 2**zoom, 2 ** (zoom - 1)
+    return 2 ** zoom, 2 ** (zoom - 1)
 
 
 def make_download_url(pano_id: str, zoom: int, x: int, y: int) -> str:
@@ -36,8 +36,7 @@ def make_download_url(pano_id: str, zoom: int, x: int, y: int) -> str:
     Returns the URL to download a tile.
     """
     return (
-        "https://cbk0.google.com/cbk"
-        f"?output=tile&panoid={pano_id}&zoom={zoom}&x={x}&y={y}"
+        f"https://dev.virtualearth.net/REST/v1/Imagery/Map/Panorama/{pano_id}/{zoom}/{x}/{y}?key=YOUR_BING_MAPS_API_KEY"
     )
 
 
