@@ -1,0 +1,33 @@
+name: Build and publish to PyPI
+
+on:
+  release:
+    types: [published]
+
+
+jobs:
+  build-n-publish:
+    name: Build and publish to PyPI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+
+      - name: Build source and wheel distributions
+        run: |
+          echo "VERSION = '$(git describe --tags)'" > version.py
+          python -m pip install --upgrade build twine
+          python -m build
+          python -m twine check --strict dist/*
+
+      - name: Publish distribution to PyPI
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
