@@ -1,164 +1,191 @@
-<script setup>
-
-</script>
-
 <template>
   <div class="container">
-    <!-- Left column -->
-    <div class="left-column">
-      <!-- Legend -->
-      <div class="legend">
-        <h2>Legend</h2>
-        <ul>
-          <li>Legend Item 1</li>
-          <li>Legend Item 2</li>
-          <li>Legend Item 3</li>
-        </ul>
-      </div>
-      <!-- Search Bar -->
-
-      <!-- Show Images -->
-      <div class="show-images">
-        <img src="/src/assets/images/image1.jpg" alt="Image 1">
-        <img src="/src/assets/images/image2.png" alt="Image 2">
-      </div>
-      <div class="search-bar">
-        <input type="text" placeholder="Search..." class="search-input">
-        <button class="search-button">Search</button>
+    <!-- Upload area -->
+    <div class="upload-container mb-4">
+      <!-- Image Upload -->
+      <div class="upload-section">
+        <h2>Upload Image</h2>
+        <input type="file" class="form-control" @change="handleFileUpload">
+        <button class="btn btn-primary mt-2" @click="uploadImage">Upload</button>
       </div>
     </div>
 
-    <!-- Right column -->
-    <div class="right-column">
-      <!-- Map -->
-      <div class="map">
-        <img src="/src/assets/images/image3.png" alt="Map" class="map-image">
+    <!-- Image container -->
+    <div class="image-container mb-4">
+      <!-- Uploaded Image Display Area -->
+      <div class="uploaded-image-area" v-if="uploadedImage">
+        <h2>Uploaded Image</h2>
+        <img :src="uploadedImage" alt="Uploaded Image" class="img-fluid uploaded-image">
       </div>
-      <!-- Navigation bar -->
-      <div class="navigation-bar">
-        <ul>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
+    </div>
+
+    <!-- Coordinate input area -->
+    <div class="coordinate-input mb-4">
+      <h2>Enter Coordinates</h2>
+      <div class="form-group">
+        <label for="latitude">Latitude</label>
+        <input type="number" class="form-control" id="latitude" v-model="latitude">
+        <select v-model="latitudeDirection" class="direction-select">
+          <option value="N">N</option>
+          <option value="S">S</option>
+        </select>
       </div>
+      <div class="form-group">
+        <label for="longitude">Longitude</label>
+        <input type="number" class="form-control" id="longitude" v-model="longitude">
+        <select v-model="longitudeDirection" class="direction-select">
+          <option value="E">E</option>
+          <option value="W">W</option>
+        </select>
+      </div>
+      <button class="btn btn-primary mt-2" @click="showOnMap">Show on Map</button>
+    </div>
+
+    <!-- Map container -->
+    <div class="map-container mb-4" v-if="latitude && longitude">
+      <h2>Location on Map</h2>
+      <div id="map"></div>
     </div>
   </div>
 </template>
 
+<script>
+import { ref } from 'vue';
+import axios from 'axios';
+import L from 'leaflet';
+
+export default {
+  setup() {
+    const uploadedImage = ref(null);
+    const latitude = ref(null);
+    const longitude = ref(null);
+    const latitudeDirection = ref('N');
+    const longitudeDirection = ref('E');
+    const file = ref(null);
+
+    const handleFileUpload = (event) => {
+      file.value = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        uploadedImage.value = e.target.result;
+      };
+      reader.readAsDataURL(file.value);
+    };
+
+    const uploadImage = async () => {
+      if (!file.value) {
+        alert('Please upload an image first');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('image', file.value);
+
+      try {
+        const response = await axios.post('http://127.0.0.1:7541/process-image', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+
+        if (response.data.plant_name) {
+          // Display detected plant name
+          alert('Detected Plant Type: ' + response.data.plant_name);
+        } else {
+          alert(response.data.error || 'Error processing image');
+        }
+      } catch (error) {
+        console.error('Error uploading the image:', error);
+        alert('Error uploading the image');
+      }
+    };
+
+    const showOnMap = async () => {
+      if (!latitude.value || !longitude.value) {
+        alert('Please enter both latitude and longitude values');
+        return;
+      }
+
+      const lat = parseFloat(latitude.value) * (latitudeDirection.value === 'S' ? -1 : 1);
+      const lng = parseFloat(longitude.value) * (longitudeDirection.value === 'W' ? -1 : 1);
+
+      if (isNaN(lat) || isNaN(lng)) {
+        alert('Please enter valid latitude and longitude values');
+        return;
+      }
+
+      const map = L.map('map').setView([lat, lng], 7);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      const locationName = await getLocationName(lat, lng);
+
+      const marker = L.marker([lat, lng]).addTo(map)
+        .bindPopup(locationName ? locationName : 'Your Location')
+        .openPopup();
+    };
+
+    const getLocationName = async (latitude, longitude) => {
+      const url = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`;
+
+      try {
+        const response = await axios.get(url);
+        const locationName = response.data.display_name;
+        return locationName;
+      } catch (error) {
+        console.error('Error retrieving location name:', error);
+        return null;
+      }
+    };
+
+    return {
+      uploadedImage,
+      latitude,
+      longitude,
+      latitudeDirection,
+      longitudeDirection,
+      handleFileUpload,
+      uploadImage,
+      showOnMap
+    };
+  }
+};
+</script>
 
 <style scoped>
 .container {
-  display: flex;
-  justify-content: space-between;
-  max-width: 1200px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
-.left-column,
-.right-column {
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9;
-  padding: 20px;
-}
-
-.left-column {
-  width: 30%;
-}
-
-.right-column {
-  width: 68%; /* Adjust to account for padding and border */
-}
-
-.legend {
-  margin-bottom: 20px;
-}
-
-.legend h2 {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-}
-
-.legend ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.legend li {
-  margin-bottom: 5px;
-}
-
-.search-bar {
-  margin-bottom: 20px;
-  display: flex;
-}
-
-.search-input {
-  flex: 1;
-  border: none;
+.upload-container,
+.image-container,
+.coordinate-input,
+.map-container {
+  border: 1px solid #ccc;
   padding: 10px;
-  border-radius: 4px;
-  font-size: 1rem;
 }
 
-.search-button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.upload-container,
+.image-container,
+.coordinate-input {
+  margin-bottom: 20px;
 }
 
-.search-button:hover {
-  background-color: #0056b3;
-}
-
-.show-images {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.show-images img {
-  width: calc(33.333% - 20px);
-  margin: 5px;
-  border-radius: 4px;
-}
-
-.map {
-  height: 300px;
-  background-color: #e6e6e6;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.map-image {
+#map {
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: 400px;
 }
 
-.navigation-bar ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.navigation-bar li {
-  display: inline-block;
-  margin-right: 20px;
-}
-
-.navigation-bar a {
-  text-decoration: none;
-  color: #333;
-  font-size: 1rem;
-  transition: color 0.3s ease;
-}
-
-.navigation-bar a:hover {
-  color: #007bff;
+.direction-select {
+  margin-top: 5px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 60px;
+  vertical-align: middle;
 }
 </style>

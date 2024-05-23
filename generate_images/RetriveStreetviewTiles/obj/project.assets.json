@@ -214,24 +214,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Zegert\\.nuget\\packages\\": {},
-    "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\alial\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Zegert\\Desktop\\Mega_Project\\generate_images\\RetriveStreetviewTiles\\RetriveStreetviewTiles.csproj",
+      "projectUniqueName": "C:\\Users\\alial\\Desktop\\project\\International-Research-Project\\generate_images\\RetriveStreetviewTiles\\RetriveStreetviewTiles.csproj",
       "projectName": "RetriveStreetviewTiles",
-      "projectPath": "C:\\Users\\Zegert\\Desktop\\Mega_Project\\generate_images\\RetriveStreetviewTiles\\RetriveStreetviewTiles.csproj",
-      "packagesPath": "C:\\Users\\Zegert\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Zegert\\Desktop\\Mega_Project\\generate_images\\RetriveStreetviewTiles\\obj\\",
+      "projectPath": "C:\\Users\\alial\\Desktop\\project\\International-Research-Project\\generate_images\\RetriveStreetviewTiles\\RetriveStreetviewTiles.csproj",
+      "packagesPath": "C:\\Users\\alial\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\alial\\Desktop\\project\\International-Research-Project\\generate_images\\RetriveStreetviewTiles\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Zegert\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\alial\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -239,7 +234,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -292,7 +286,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.203/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
