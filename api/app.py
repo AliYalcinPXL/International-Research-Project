@@ -23,7 +23,7 @@ def process_image():
     image_file.save(image_path)
 
     # Predict class of the image
-    class_labels_mapping = {0: 'rose', 1: 'common-dandelion', 2: 'firethorn', 3: 'sunflower', 4: 'corn-poppy'}
+    class_labels_mapping = {0: 'Rose', 1: 'Common-dandelion', 2: 'Firethorn', 3: 'Sunflower', 4: 'Corn-poppy'}
     predicted_class = predict_image_class(image_path)
     predicted_class_label = class_labels_mapping[np.argmax(predicted_class)]
 

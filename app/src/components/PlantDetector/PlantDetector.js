@@ -1,55 +1,4 @@
-<template>
-  <div class="container">
-    <!-- Upload area -->
-    <div class="upload-container mb-4">
-      <!-- Image Upload -->
-      <div class="upload-section">
-        <h2>Upload Image</h2>
-        <input type="file" class="form-control" @change="handleFileUpload">
-        <button class="btn btn-primary mt-2" @click="uploadImage">Upload</button>
-      </div>
-    </div>
-
-    <!-- Image container -->
-    <div class="image-container mb-4">
-      <!-- Uploaded Image Display Area -->
-      <div class="uploaded-image-area" v-if="uploadedImage">
-        <h2>Uploaded Image</h2>
-        <img :src="uploadedImage" alt="Uploaded Image" class="img-fluid uploaded-image">
-      </div>
-    </div>
-
-    <!-- Coordinate input area -->
-    <div class="coordinate-input mb-4">
-      <h2>Enter Coordinates</h2>
-      <div class="form-group">
-        <label for="latitude">Latitude</label>
-        <input type="number" class="form-control" id="latitude" v-model="latitude">
-        <select v-model="latitudeDirection" class="direction-select">
-          <option value="N">N</option>
-          <option value="S">S</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="longitude">Longitude</label>
-        <input type="number" class="form-control" id="longitude" v-model="longitude">
-        <select v-model="longitudeDirection" class="direction-select">
-          <option value="E">E</option>
-          <option value="W">W</option>
-        </select>
-      </div>
-      <button class="btn btn-primary mt-2" @click="showOnMap">Show on Map</button>
-    </div>
-
-    <!-- Map container -->
-    <div class="map-container mb-4" v-if="latitude && longitude">
-      <h2>Location on Map</h2>
-      <div id="map"></div>
-    </div>
-  </div>
-</template>
-
-<script>
+// src/components/PlantDetector/PlantDetector.js
 import { ref } from 'vue';
 import axios from 'axios';
 import L from 'leaflet';
@@ -62,6 +11,7 @@ export default {
     const latitudeDirection = ref('N');
     const longitudeDirection = ref('E');
     const file = ref(null);
+    const plantType = ref('');
 
     const handleFileUpload = (event) => {
       file.value = event.target.files[0];
@@ -72,7 +22,7 @@ export default {
       reader.readAsDataURL(file.value);
     };
 
-    const uploadImage = async () => {
+    const processImage = async () => {
       if (!file.value) {
         alert('Please upload an image first');
         return;
@@ -89,14 +39,14 @@ export default {
         });
 
         if (response.data.plant_name) {
-          // Display detected plant name
-          alert('Detected Plant Type: ' + response.data.plant_name);
+          // Set detected plant name
+          plantType.value = response.data.plant_name;
         } else {
-          alert(response.data.error || 'Error processing image');
+          plantType.value = response.data.error || 'Error processing image';
         }
       } catch (error) {
         console.error('Error uploading the image:', error);
-        alert('Error uploading the image');
+        plantType.value = 'Error uploading the image';
       }
     };
 
@@ -147,45 +97,10 @@ export default {
       longitude,
       latitudeDirection,
       longitudeDirection,
+      plantType,
       handleFileUpload,
-      uploadImage,
+      processImage,
       showOnMap
     };
   }
 };
-</script>
-
-<style scoped>
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.upload-container,
-.image-container,
-.coordinate-input,
-.map-container {
-  border: 1px solid #ccc;
-  padding: 10px;
-}
-
-.upload-container,
-.image-container,
-.coordinate-input {
-  margin-bottom: 20px;
-}
-
-#map {
-  width: 100%;
-  height: 400px;
-}
-
-.direction-select {
-  margin-top: 5px;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 60px;
-  vertical-align: middle;
-}
-</style>
