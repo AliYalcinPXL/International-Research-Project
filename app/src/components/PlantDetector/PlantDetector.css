@@ -1,14 +1,14 @@
 /* src/components/PlantDetector/PlantDetector.css */
 .container {
   max-width: 1300px; 
-  margin: 0 auto; 
+  margin: 0;
   display: flex; 
-  flex-wrap: wrap; 
 }
 
 .left-side {
-  width: 100%; 
-  margin-bottom: 10px; 
+  flex-grow: 1;
+  width: 50px;
+  margin-right: 10px;
 }
 
 .upload-container,
@@ -26,7 +26,7 @@
 
 .right-side {
   width: 70%; 
-  margin-left: auto; 
+  margin-left: 10px;
 }
 
 #map {
@@ -56,14 +56,23 @@
   color: #4CAF50;
 }
 
-/* Media query for larger screens */
-@media (min-width: 768px) {
-  .left-side {
-      width: 30%; 
-  }
+.coordinate-fields {
+  display: flex;
+}
 
-  .right-side {
-      width: calc(70% - 20px); 
-      margin-left: 20px; 
-  }
+.coordinate-fields .form-group {
+  flex: 1;
+}
+
+.coordinate-fields .form-group:not(:last-child) {
+  margin-right: 10px;
+}
+
+.button-container {
+  display: flex;
+}
+
+.button-container .btn {
+  flex: 1;
+  margin-right: 10px;
 }

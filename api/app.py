@@ -1,13 +1,15 @@
 from flask import Flask, request, jsonify
 import os
 import numpy as np
-from image_processing import predict_image_class, extract_coordinates
+from image_processing import predict_image_class
 from flask_cors import CORS, cross_origin
 
 
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
+COORDINATES_FILE_PATH = os.path.join('exports', 'coordinates.txt')
+
 
 
 # API endpoint to process image and extract coordinates
@@ -30,6 +32,26 @@ def process_image():
     response_data = {'plant_name': predicted_class_label}
     return jsonify(response_data),200
 
+@app.route('/save-coordinates', methods=['POST'])
+@cross_origin(origin='*')
+def save_coordinates():
+    data = request.json
+    latitude = data.get('latitude')
+    longitude = data.get('longitude')
+    location_name = data.get('location_name')
+
+    if latitude is None or longitude is None or location_name is None:
+        return jsonify({'error': 'Latitude, longitude, and location name are required'}), 400
+
+    coordinates_text = f"Latitude: {latitude}\nLongitude: {longitude}\nLocation Name: {location_name}\n"
+
+    try:
+        # Append coordinates to the existing file
+        with open(COORDINATES_FILE_PATH, 'a') as file:
+            file.write(coordinates_text)
+        return jsonify({'message': 'Coordinates and location name saved successfully', 'filePath': COORDINATES_FILE_PATH}), 200
+    except Exception as e:
+        return jsonify({'error': f'Error saving coordinates to file: {str(e)}'}), 500
 
     # Extract coordinates if the predicted class is "firethorn"
     # if predicted_class_label == 'firethorn':

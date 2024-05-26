@@ -12,6 +12,7 @@ export default {
     const longitudeDirection = ref('E');
     const file = ref(null);
     const plantType = ref('');
+    const locationName = ref('');
 
     const handleFileUpload = (event) => {
       file.value = event.target.files[0];
@@ -39,7 +40,6 @@ export default {
         });
 
         if (response.data.plant_name) {
-          // Set detected plant name
           plantType.value = response.data.plant_name;
         } else {
           plantType.value = response.data.error || 'Error processing image';
@@ -52,31 +52,36 @@ export default {
 
     const showOnMap = async () => {
       if (!latitude.value || !longitude.value) {
-        alert('Please enter both latitude and longitude values');
-        return;
+          alert('Please enter both latitude and longitude values');
+          return;
       }
-
+  
       const lat = parseFloat(latitude.value) * (latitudeDirection.value === 'S' ? -1 : 1);
       const lng = parseFloat(longitude.value) * (longitudeDirection.value === 'W' ? -1 : 1);
-
+  
       if (isNaN(lat) || isNaN(lng)) {
-        alert('Please enter valid latitude and longitude values');
-        return;
+          alert('Please enter valid latitude and longitude values');
+          return;
       }
-
+  
       const map = L.map('map').setView([lat, lng], 7);
-
+  
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+          maxZoom: 19,
+          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
       }).addTo(map);
-
-      const locationName = await getLocationName(lat, lng);
-
+  
+      const location = await getLocationName(lat, lng);
+      locationName.value = location;
+  
+      const formattedLat = lat.toFixed(4) + '° ' + (lat >= 0 ? 'N' : 'S');
+      const formattedLng = lng.toFixed(4) + '° ' + (lng >= 0 ? 'E' : 'W');
+      const coordinatesText = `${formattedLat}, ${formattedLng}`;
+  
       const marker = L.marker([lat, lng]).addTo(map)
-        .bindPopup(locationName ? locationName : 'Your Location')
-        .openPopup();
-    };
+          .bindPopup(locationName.value ? locationName.value : 'Your Location' + '<br>' + coordinatesText)
+          .openPopup();
+  };
 
     const getLocationName = async (latitude, longitude) => {
       const url = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`;
@@ -91,6 +96,38 @@ export default {
       }
     };
 
+    const saveCoordinates = async () => {
+      if (!latitude.value || !longitude.value || !locationName.value) {
+        alert('Please enter both latitude and longitude values and get the location name');
+        return;
+      }
+
+      const lat = parseFloat(latitude.value) * (latitudeDirection.value === 'S' ? -1 : 1);
+      const lng = parseFloat(longitude.value) * (longitudeDirection.value === 'W' ? -1 : 1);
+
+      if (isNaN(lat) || isNaN(lng)) {
+        alert('Please enter valid latitude and longitude values');
+        return;
+      }
+
+      try {
+        const response = await axios.post('http://127.0.0.1:7541/save-coordinates', {
+          latitude: lat,
+          longitude: lng,
+          location_name: locationName.value
+        });
+
+        if (response.data.filePath) {
+          alert('Coordinates and location name saved successfully');
+        } else {
+          alert('Error saving coordinates and location name');
+        }
+      } catch (error) {
+        console.error('Error saving coordinates:', error);
+        alert('Error saving coordinates and location name');
+      }
+    };
+
     return {
       uploadedImage,
       latitude,
@@ -98,9 +135,11 @@ export default {
       latitudeDirection,
       longitudeDirection,
       plantType,
+      locationName,
       handleFileUpload,
       processImage,
-      showOnMap
+      showOnMap,
+      saveCoordinates
     };
   }
 };

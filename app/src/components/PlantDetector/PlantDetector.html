@@ -30,23 +30,28 @@
     <!-- Coordinate input area -->
     <div class="coordinate-input mb-4">
       <h2>Enter Coordinates</h2>
-      <div class="form-group">
-        <label for="latitude">Latitude</label>
-        <input type="number" class="form-control" id="latitude" v-model="latitude">
-        <select v-model="latitudeDirection" class="direction-select">
-          <option value="N">N</option>
-          <option value="S">S</option>
-        </select>
+      <div class="coordinate-fields">
+        <div class="form-group">
+          <label for="latitude">Latitude</label>
+          <input type="number" class="form-control" id="latitude" v-model="latitude">
+          <select v-model="latitudeDirection" class="direction-select">
+            <option value="N">N</option>
+            <option value="S">S</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="longitude">Longitude</label>
+          <input type="number" class="form-control" id="longitude" v-model="longitude">
+          <select v-model="longitudeDirection" class="direction-select">
+            <option value="E">E</option>
+            <option value="W">W</option>
+          </select>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="longitude">Longitude</label>
-        <input type="number" class="form-control" id="longitude" v-model="longitude">
-        <select v-model="longitudeDirection" class="direction-select">
-          <option value="E">E</option>
-          <option value="W">W</option>
-        </select>
+      <div class="button-container">
+        <button class="btn btn-primary mt-2" @click="showOnMap">Show on Map</button>
+        <button class="btn btn-success mt-2" @click="saveCoordinates">Save Coordinates and Location Name</button>
       </div>
-      <button class="btn btn-primary mt-2" @click="showOnMap">Show on Map</button>
     </div>
 
     <!-- Map container -->
