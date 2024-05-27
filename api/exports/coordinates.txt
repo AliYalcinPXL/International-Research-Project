@@ -1,11 +1,6 @@
-Latitude: -33
-Longitude: 18
-Location Name: Saldanha Bay Ward 5, Saldanha Bay Local Municipality, West Coast District Municipality, Western Cape, 7395, South AfricaLatitude: -33.55
-Longitude: 18.25
-Location Name: Western Cape, South Africa
 Latitude: 38
 Longitude: -77
 Location Name: Lloyds, Essex County, Virginia, 22438, United States
-Latitude: 50.78
-Longitude: 5.46
-Location Name: 1, Sint-Truidersteenweg, Paspoel, Tongeren, Limburg, 3700, Belgium
+Latitude: 38
+Longitude: -76
+Location Name: Ewell, Somerset County, Maryland, 21824, United States

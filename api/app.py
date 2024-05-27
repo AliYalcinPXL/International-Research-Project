@@ -32,21 +32,27 @@ def process_image():
     response_data = {'plant_name': predicted_class_label}
     return jsonify(response_data),200
 
+
+# API endpoint to save the entered coordinates with location information
 @app.route('/save-coordinates', methods=['POST'])
 @cross_origin(origin='*')
 def save_coordinates():
     data = request.json
-    latitude = data.get('latitude')
-    longitude = data.get('longitude')
-    location_name = data.get('location_name')
+    coordinates = data.get('coordinates')
 
-    if latitude is None or longitude is None or location_name is None:
-        return jsonify({'error': 'Latitude, longitude, and location name are required'}), 400
+    if not coordinates or not isinstance(coordinates, list):
+        return jsonify({'error': 'Invalid coordinates data'}), 400
 
-    coordinates_text = f"Latitude: {latitude}\nLongitude: {longitude}\nLocation Name: {location_name}\n"
+    coordinates_text = ""
+    for coord in coordinates:
+        latitude = coord.get('latitude')
+        longitude = coord.get('longitude')
+        location_name = coord.get('location_name')
+        if latitude is None or longitude is None or location_name is None:
+            return jsonify({'error': 'Latitude, longitude, and location name are required for all coordinates'}), 400
+        coordinates_text += f"Latitude: {latitude}\nLongitude: {longitude}\nLocation Name: {location_name}\n"
 
     try:
-        # Append coordinates to the existing file
         with open(COORDINATES_FILE_PATH, 'a') as file:
             file.write(coordinates_text)
         return jsonify({'message': 'Coordinates and location name saved successfully', 'filePath': COORDINATES_FILE_PATH}), 200
@@ -64,6 +70,8 @@ def save_coordinates():
     #         return jsonify({'error': 'No GPS data found in image'}), 400
     # else:
     #     return jsonify({'error': 'Image does not belong to firethorn class'}), 400
+
+    # API endpoint to fetch saved coordinates
 
 if __name__ == '__main__':
     app.run(debug=True, port=7541)

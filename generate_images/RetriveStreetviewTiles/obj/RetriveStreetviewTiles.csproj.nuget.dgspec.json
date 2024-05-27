@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\alial\\Desktop\\project\\International-Research-Project\\generate_images\\RetriveStreetviewTiles\\RetriveStreetviewTiles.csproj": {}
+    "C:\\Users\\alial\\Desktop\\proj last\\International-Research-Project\\generate_images\\RetriveStreetviewTiles\\RetriveStreetviewTiles.csproj": {}
   },
   "projects": {
-    "C:\\Users\\alial\\Desktop\\project\\International-Research-Project\\generate_images\\RetriveStreetviewTiles\\RetriveStreetviewTiles.csproj": {
+    "C:\\Users\\alial\\Desktop\\proj last\\International-Research-Project\\generate_images\\RetriveStreetviewTiles\\RetriveStreetviewTiles.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alial\\Desktop\\project\\International-Research-Project\\generate_images\\RetriveStreetviewTiles\\RetriveStreetviewTiles.csproj",
+        "projectUniqueName": "C:\\Users\\alial\\Desktop\\proj last\\International-Research-Project\\generate_images\\RetriveStreetviewTiles\\RetriveStreetviewTiles.csproj",
         "projectName": "RetriveStreetviewTiles",
-        "projectPath": "C:\\Users\\alial\\Desktop\\project\\International-Research-Project\\generate_images\\RetriveStreetviewTiles\\RetriveStreetviewTiles.csproj",
+        "projectPath": "C:\\Users\\alial\\Desktop\\proj last\\International-Research-Project\\generate_images\\RetriveStreetviewTiles\\RetriveStreetviewTiles.csproj",
         "packagesPath": "C:\\Users\\alial\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alial\\Desktop\\project\\International-Research-Project\\generate_images\\RetriveStreetviewTiles\\obj\\",
+        "outputPath": "C:\\Users\\alial\\Desktop\\proj last\\International-Research-Project\\generate_images\\RetriveStreetviewTiles\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\alial\\AppData\\Roaming\\NuGet\\NuGet.Config",

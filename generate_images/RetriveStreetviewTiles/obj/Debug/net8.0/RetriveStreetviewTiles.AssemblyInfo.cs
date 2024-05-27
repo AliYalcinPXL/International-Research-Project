@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RetriveStreetviewTiles")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9644b2e4d9c20bb393f33476e3b26c54538c60d9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ad6059889142e88cd437377162de0ae278d3fe39")]
 [assembly: System.Reflection.AssemblyProductAttribute("RetriveStreetviewTiles")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RetriveStreetviewTiles")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
