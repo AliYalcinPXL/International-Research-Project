@@ -1,0 +1,62 @@
+<!-- src/components/PlantDetector/PlantDetector.html -->
+<div class="container">
+  <!-- Left side: Upload area and Uploaded Image Display Area -->
+  <div class="left-side">
+    <!-- Upload area -->
+    <div class="upload-container mb-4">
+      <!-- Image Upload -->
+      <div class="upload-section">
+        <h2>Upload An Image</h2>
+        <input type="file" class="form-control" @change="handleFileUpload">
+        <button class="btn btn-primary mt-2" @click="processImage">Process Image</button>
+      </div>
+    </div>
+
+    <!-- Image container -->
+    <div class="image-container mb-4">
+      <!-- Uploaded Image Display Area -->
+      <div class="uploaded-image-area" v-if="uploadedImage">
+        <img :src="uploadedImage" alt="Uploaded Image" class="img-fluid">
+        <div class="plant-type" v-if="plantType">
+          <h3>Detected Plant Type</h3>
+          <p>{{ plantType }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right side: Map container -->
+  <div class="right-side">
+    <!-- Coordinate input area -->
+    <div class="coordinate-input mb-4">
+      <h2>Enter Coordinates</h2>
+      <div class="coordinate-fields">
+        <div class="form-group">
+          <label for="latitude">Latitude</label>
+          <input type="number" class="form-control" id="latitude" v-model="latitude">
+          <select v-model="latitudeDirection" class="direction-select">
+            <option value="N">N</option>
+            <option value="S">S</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="longitude">Longitude</label>
+          <input type="number" class="form-control" id="longitude" v-model="longitude">
+          <select v-model="longitudeDirection" class="direction-select">
+            <option value="E">E</option>
+            <option value="W">W</option>
+          </select>
+        </div>
+      </div>
+      <div class="button-container">
+        <button class="btn btn-primary mt-2" @click="showOnMap">Show on Map</button>
+        <button class="btn btn-success mt-2" @click="saveCoordinates">Save Coordinates and Location Name</button>
+      </div>
+    </div>
+
+    <!-- Map container -->
+    <div class="map-container mb-4" v-if="latitude && longitude">
+      <div id="map"></div>
+    </div>
+  </div>
+</div>
